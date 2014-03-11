@@ -13,7 +13,10 @@ func apiRequest(verb string, jsonData []byte, path string) (data []byte, bErrors
 	body := bytes.NewReader(jsonData)
 	r, _ := http.NewRequest(verb, url, body)
 	r.SetBasicAuth(Username, "")
-	r.Header.Set("Content-Type", "application/json")
+	if jsonData != nil {
+		r.Header.Set("Content-Type", "application/json;revision=1.1")
+	}
+	r.Header.Set("Accept", "application/vnd.api+json;revision=1.1")
 
 	resp, err := client.Do(r)
 	if err != nil {
@@ -22,7 +25,9 @@ func apiRequest(verb string, jsonData []byte, path string) (data []byte, bErrors
 	buf := new(bytes.Buffer)
 	buf.ReadFrom(resp.Body)
 
-	errs := new(errors)
+	var errs struct {
+		Errors []*BalancedError `json:"errors"`
+	}
 	if resp.StatusCode >= 400 {
 		json.Unmarshal(buf.Bytes(), &errs)
 	}

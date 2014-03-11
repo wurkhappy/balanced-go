@@ -10,7 +10,3 @@ type BalancedError struct {
 	Status       string                 `json:"status"`
 	StatusCode   float64                `json:"status_code"`
 }
-
-type errors struct {
-	Errors []*BalancedError `json::"errors"`
-}

@@ -5,10 +5,8 @@ import (
 )
 
 func setUp() {
-	Username = "ak-test-2redrYtUIi5rOqHOukWRCbyg8S2jBG5nr"
+	Username = "ak-test-2ADpvITfpgBn8uBzEGsQ2bIgWaftUWiul"
 }
-
-var globalVerificationURI string
 
 func setUpAccount() *BankAccount {
 	account := &BankAccount{
@@ -21,15 +19,6 @@ func setUpAccount() *BankAccount {
 	return account
 }
 
-func setUpVerification() *BankAccount {
-	account := setUpAccount()
-	if globalVerificationURI == "" {
-		_, _ = account.Verify()
-		globalVerificationURI = account.VerificationURI
-	}
-	return account
-}
-
 func Test_Create(t *testing.T) {
 	setUp()
 	account := &BankAccount{
@@ -38,11 +27,12 @@ func Test_Create(t *testing.T) {
 		Name:          "Johan Bernoulli",
 		AccountNumber: "9900000001",
 	}
-	bError := account.Create()
-	if bError != nil {
-		t.Errorf("Error returned:%q", bError)
+	bErrors := account.Create()
+	t.Log(account)
+	if len(bErrors) > 0 {
+		t.Errorf("Error returned:%q", bErrors)
 	}
-	if account.URI == "" {
+	if account.ID == "" {
 		t.Error("No bank account id was returned")
 	}
 }
@@ -50,30 +40,76 @@ func Test_Create(t *testing.T) {
 func Test_Retrieve(t *testing.T) {
 	setUp()
 	account := setUpAccount()
-	bError := account.Retrieve()
+	bErrors := account.Retrieve()
 
-	if bError != nil {
-		t.Errorf("Error returned:%q", bError)
+	if len(bErrors) > 0 {
+		t.Errorf("Error returned:%q", bErrors)
+	}
+}
+
+func Test_Update(t *testing.T) {
+	setUp()
+	account := setUpAccount()
+	account.Meta = map[string]interface{}{
+		"updated": false,
+	}
+	bErrors := account.Update()
+
+	if len(bErrors) > 0 {
+		t.Errorf("Error returned:%q", bErrors)
+	}
+	//Balanced API turns all meta properties into strings
+	//Initially, a bool is passed so if a string is returned then the request was succesful
+	if account.Meta["updated"].(string) == "false" {
+		t.Error("Bank account was not updated")
 	}
 }
 
 func Test_Delete(t *testing.T) {
 	setUp()
 	account := setUpAccount()
-	bError := account.Delete()
+	bErrors := account.Delete()
 
-	if bError != nil {
-		t.Errorf("Error returned:%q", bError)
+	if len(bErrors) > 0 {
+		t.Errorf("Error returned:%q", bErrors)
+	}
+}
+
+func Test_Debit(t *testing.T) {
+	setUp()
+	account := setUpAccount()
+	debit := &Debit{
+		Amount:               5000,
+		AppearsOnStatementAs: "test",
+		Description:          "Some descriptive text for the debit in the dashboard",
+	}
+	verification, _ := account.Verify()
+	verification.Confirm(1, 1)
+	updatedDebit, bErrors := account.Debit(debit)
+
+	if len(bErrors) > 0 {
+		t.Errorf("Error returned:%q", bErrors)
+		return
+	}
+
+	if updatedDebit.ID == "" {
+		t.Error("Debit was not given an ID")
+	}
+	if updatedDebit.Status != "succeeded" {
+		t.Errorf("Expected succeeded status, instead got: ", updatedDebit.Status)
 	}
 }
 
 func Test_Verify(t *testing.T) {
 	setUp()
 	account := setUpAccount()
-	_, bError := account.Verify()
-	globalVerificationURI = account.VerificationURI
+	verification, bErrors := account.Verify()
 
-	if bError != nil {
-		t.Errorf("Error returned:%q", bError)
+	if len(bErrors) > 0 {
+		t.Errorf("Error returned:%q", bErrors)
+	}
+
+	if verification.ID == "" {
+		t.Error("Verification was not given an ID")
 	}
 }

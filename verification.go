@@ -6,13 +6,13 @@ import (
 )
 
 type Verification struct {
-	Attempts           int       `json:"attempts"`
-	AttemptsRemaining  int       `json:"attempts_remaining"`
-	CreatedAt          time.Time `json:"created_at"`
-	DepositStatus      string    `json:"deposit_status"`
-	ID                 string    `json:"id"`
-	UpdatedAt          time.Time `json:"updated_at"`
-	VerificationStatus string    `json:"verification_status"`
+	Attempts           int       `json:"attempts,omitempty"`
+	AttemptsRemaining  int       `json:"attempts_remaining,omitempty"`
+	CreatedAt          time.Time `json:"created_at,omitempty"`
+	DepositStatus      string    `json:"deposit_status,omitempty"`
+	ID                 string    `json:"id,omitempty"`
+	UpdatedAt          time.Time `json:"updated_at,omitempty"`
+	VerificationStatus string    `json:"verification_status,omitempty"`
 }
 
 type verificationResponse struct {

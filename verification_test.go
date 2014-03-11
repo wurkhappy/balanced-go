@@ -11,7 +11,6 @@ func setUpVerification() *Verification {
 }
 
 func Test_Verification_Fetch(t *testing.T) {
-	setUp()
 	verification := setUpVerification()
 	bErrors := verification.Fetch()
 
@@ -21,7 +20,6 @@ func Test_Verification_Fetch(t *testing.T) {
 }
 
 func Test_Verification_Confirm(t *testing.T) {
-	setUp()
 	verification := setUpVerification()
 	bErrors := verification.Confirm(1, 1)
 

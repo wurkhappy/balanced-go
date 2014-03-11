@@ -4,10 +4,6 @@ import (
 	"testing"
 )
 
-func setUp() {
-	Username = "ak-test-2ADpvITfpgBn8uBzEGsQ2bIgWaftUWiul"
-}
-
 func setUpAccount() *BankAccount {
 	account := &BankAccount{
 		RoutingNumber: "121000358",
@@ -19,8 +15,7 @@ func setUpAccount() *BankAccount {
 	return account
 }
 
-func Test_Create(t *testing.T) {
-	setUp()
+func Test_BankAccount_Create(t *testing.T) {
 	account := &BankAccount{
 		RoutingNumber: "121000358",
 		Type:          "checking",
@@ -28,7 +23,6 @@ func Test_Create(t *testing.T) {
 		AccountNumber: "9900000001",
 	}
 	bErrors := account.Create()
-	t.Log(account)
 	if len(bErrors) > 0 {
 		t.Errorf("Error returned:%q", bErrors)
 	}
@@ -37,8 +31,7 @@ func Test_Create(t *testing.T) {
 	}
 }
 
-func Test_Retrieve(t *testing.T) {
-	setUp()
+func Test_BankAccount_Retrieve(t *testing.T) {
 	account := setUpAccount()
 	bErrors := account.Retrieve()
 
@@ -47,8 +40,7 @@ func Test_Retrieve(t *testing.T) {
 	}
 }
 
-func Test_Update(t *testing.T) {
-	setUp()
+func Test_BankAccount_Update(t *testing.T) {
 	account := setUpAccount()
 	account.Meta = map[string]interface{}{
 		"updated": false,
@@ -65,8 +57,7 @@ func Test_Update(t *testing.T) {
 	}
 }
 
-func Test_Delete(t *testing.T) {
-	setUp()
+func Test_BankAccount_Delete(t *testing.T) {
 	account := setUpAccount()
 	bErrors := account.Delete()
 
@@ -75,12 +66,11 @@ func Test_Delete(t *testing.T) {
 	}
 }
 
-func Test_Debit(t *testing.T) {
-	setUp()
+func Test_BankAccount_Debit(t *testing.T) {
 	account := setUpAccount()
 	debit := &Debit{
 		Amount:               5000,
-		AppearsOnStatementAs: "test",
+		AppearsOnStatementAs: "Test_BankAccount",
 		Description:          "Some descriptive text for the debit in the dashboard",
 	}
 	verification, _ := account.Verify()
@@ -100,8 +90,7 @@ func Test_Debit(t *testing.T) {
 	}
 }
 
-func Test_Verify(t *testing.T) {
-	setUp()
+func Test_BankAccount_Verify(t *testing.T) {
 	account := setUpAccount()
 	verification, bErrors := account.Verify()
 

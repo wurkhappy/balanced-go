@@ -2,49 +2,42 @@ package balanced
 
 import (
 	"encoding/json"
+	"time"
 )
 
 type Card struct {
-	CardNumber      string                 `json:"card_number,omitempty"`
+	Address         *Address               `json:"address,omitempty"`
+	CreatedAt       time.Time              `json:"created_at,omitempty"`
+	CVV             string                 `json:"cvv,omitempty"`
+	CVVMatch        string                 `json:"cvv_match,omitempty"`
+	CVVResult       string                 `json:"cvv_result,omitempty"`
 	ExpirationYear  int                    `json:"expiration_year,omitempty"`
 	ExpirationMonth int                    `json:"expiration_month,omitempty"`
-	SecurityCode    string                 `json:"security_code,omitempty"`
+	ID              string                 `json:"id,omitempty"`
+	UpdatedAt       time.Time              `json:"updated_at,omitempty"`
+	Number          string                 `json:"number,omitempty"`
 	Name            string                 `json:"name,omitempty"`
-	PhoneNumber     string                 `json:"phone_number,omitempty"`
-	City            string                 `json:"city,omitempty"`
-	Region          string                 `json:"region,omitempty"`
-	State           string                 `json:"state,omitempty"`
-	PostalCode      string                 `json:"postal_code,omitempty"`
-	StreetAddress   string                 `json:"street_address,omitempty"`
-	CountryCode     string                 `json:"country_code,omitempty"`
 	Meta            map[string]interface{} `json:"meta,omitempty"`
-	Verify          bool                   `json:"verify,omitempty"`
-	URI             string                 `json:"uri,omitempty"`
-	IsValid         bool                   `json:"is_valid,omitempty"`
-	LastFour        string                 `json:"last_four,omitempty"`
 }
 
-func (c *Card) Create(marketplaceID string) []*BalancedError {
-	jsonData, _ := json.Marshal(c)
-	data, bError := apiRequest("POST", jsonData, apiVersion+"/marketplaces/"+marketplaceID+"/cards")
-	json.Unmarshal(data, &c)
-	return bError
+type cardResponse struct {
+	Cards []*Card `json:"cards"`
 }
 
-func (c *Card) Retrieve() []*BalancedError {
-	data, bError := apiRequest("GET", nil, c.URI)
-	json.Unmarshal(data, &c)
-	return bError
+func (c *Card) path() string {
+	return "/cards"
 }
 
-func (c *Card) Update() []*BalancedError {
-	jsonData, _ := json.Marshal(c)
-	data, bError := apiRequest("PUT", jsonData, c.URI)
-	json.Unmarshal(data, &c)
-	return bError
+func (c *Card) getID() string {
+	return c.ID
 }
 
-func (c *Card) Delete() []*BalancedError {
-	_, bError := apiRequest("DELETE", nil, c.URI)
-	return bError
+func (c *Card) singleResponse(data []byte) {
+	parsedResponse := new(cardResponse)
+	json.Unmarshal(data, &parsedResponse)
+	*c = *parsedResponse.Cards[0]
+}
+
+func (c *Card) canDebit() bool {
+	return true
 }

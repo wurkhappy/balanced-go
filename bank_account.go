@@ -24,67 +24,38 @@ type bankAccountResponse struct {
 	BankAccounts []*BankAccount `json:"bank_accounts"`
 }
 
-//Creates a new BankAccount resource that represents a bank account funding instrument.
-//NOTE: This method is not recommended for production environments. Please use balanced.js for creating bank accounts.
-func (b *BankAccount) Create() []*BalancedError {
-	jsonData, _ := json.Marshal(b)
-	data, bErrors := apiRequest("POST", jsonData, "/bank_accounts")
-	if len(bErrors) > 0 {
-		return bErrors
-	}
+func (b *BankAccount) path() string {
+	return "/bank_accounts"
+}
+
+func (b *BankAccount) getID() string {
+	return b.ID
+}
+
+func (b *BankAccount) singleResponse(data []byte) {
 	parsedResponse := new(bankAccountResponse)
 	json.Unmarshal(data, &parsedResponse)
 	*b = *parsedResponse.BankAccounts[0]
-	return nil
 }
 
-//Fetches the details of a previously created bank account.
-//In order to retrieve, make an instance of BankAccount with the ID of the resource you wish to retrieve.
-func (b *BankAccount) Retrieve() []*BalancedError {
-	data, bErrors := apiRequest("GET", nil, "/bank_accounts/"+b.ID)
-	if len(bErrors) > 0 {
-		return bErrors
-	}
-	parsedResponse := new(bankAccountResponse)
-	json.Unmarshal(data, &parsedResponse)
-	*b = *parsedResponse.BankAccounts[0]
-	return nil
-}
-
-//Update information for a BankAccount resource.
-//NOTE: Once a bank account has been associated to a customer, it cannot be associated to another customer.
-func (b *BankAccount) Update() []*BalancedError {
-	jsonData, _ := json.Marshal(b)
-	data, bErrors := apiRequest("PUT", jsonData, "/bank_accounts/"+b.ID)
-	if len(bErrors) > 0 {
-		return bErrors
-	}
-	parsedResponse := new(bankAccountResponse)
-	json.Unmarshal(data, &parsedResponse)
-	*b = *parsedResponse.BankAccounts[0]
-	return nil
-}
-
-//Permanently delete a bank account. It cannot be undone. All associated credits with a deleted bank account will not be affected.
-func (b *BankAccount) Delete() []*BalancedError {
-	_, bErrors := apiRequest("DELETE", nil, "/bank_accounts/"+b.ID)
-	return bErrors
+func (b *BankAccount) canDebit() bool {
+	return true
 }
 
 //Charge a bank account.
 //NOTE: A bank account must be verified with micro deposits before it can be debited. See Bank Account Verifications.
-func (b *BankAccount) Debit(debit *Debit) (*Debit, []*BalancedError) {
-	jsonData, _ := json.Marshal(debit)
-	data, bErrors := apiRequest("POST", jsonData, "/bank_accounts/"+b.ID+"/debits")
-	if len(bErrors) > 0 {
-		return nil, bErrors
-	}
-	var response struct {
-		Debits []*Debit `json:"debits"`
-	}
-	json.Unmarshal(data, &response)
-	return response.Debits[0], bErrors
-}
+// func (b *BankAccount) Debit(debit *Debit) (*Debit, []*BalancedError) {
+// 	jsonData, _ := json.Marshal(debit)
+// 	data, bErrors := apiRequest("POST", jsonData, "/bank_accounts/"+b.ID+"/debits")
+// 	if len(bErrors) > 0 {
+// 		return nil, bErrors
+// 	}
+// 	var response struct {
+// 		Debits []*Debit `json:"debits"`
+// 	}
+// 	json.Unmarshal(data, &response)
+// 	return response.Debits[0], bErrors
+// }
 
 //Create a new bank account verification.
 //This initiates the process of sending micro deposits to the bank account

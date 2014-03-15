@@ -17,6 +17,8 @@ type Resource interface {
 	singleResponse([]byte)
 }
 
+//Creates a resource.
+//Verifications, CardHolds, Credits, Debits, Orders, Refunds and Reversals, have an Owner field which must point to the correct Resource in order to be created.
 func Create(resource Resource) []*BalancedError {
 	jsonData, _ := json.Marshal(resource)
 	data, bErrors := apiRequest("POST", jsonData, resource.getOwnerPath()+resource.path())
@@ -27,6 +29,7 @@ func Create(resource Resource) []*BalancedError {
 	return nil
 }
 
+//Fetches a single resource.
 func Fetch(resource Resource) []*BalancedError {
 	data, bErrors := apiRequest("GET", nil, resource.path()+"/"+resource.getID())
 	if len(bErrors) > 0 {
@@ -36,6 +39,7 @@ func Fetch(resource Resource) []*BalancedError {
 	return nil
 }
 
+//Updates a resource.
 func Update(resource Resource) []*BalancedError {
 	jsonData, _ := json.Marshal(resource)
 	data, bErrors := apiRequest("PUT", jsonData, resource.path()+"/"+resource.getID())
@@ -46,6 +50,9 @@ func Update(resource Resource) []*BalancedError {
 	return nil
 }
 
+//Deletes a resource.
+//Please note that not all resources can be deleted.
+//The resources that cannot be deleted are: Verification, CardHold, Credit, Debit, Order, Refund, Reversal
 func Delete(resource Resource) []*BalancedError {
 	_, bErrors := apiRequest("DELETE", nil, resource.path()+"/"+resource.getID())
 	return bErrors

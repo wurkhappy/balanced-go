@@ -13,17 +13,13 @@ var (
 type Resource interface {
 	path() string
 	getID() string
+	getOwnerPath() string
 	singleResponse([]byte)
-}
-
-type Instrument interface {
-	Resource
-	canDebit() bool
 }
 
 func Create(resource Resource) []*BalancedError {
 	jsonData, _ := json.Marshal(resource)
-	data, bErrors := apiRequest("POST", jsonData, resource.path())
+	data, bErrors := apiRequest("POST", jsonData, resource.getOwnerPath()+resource.path())
 	if len(bErrors) > 0 {
 		return bErrors
 	}
@@ -53,17 +49,4 @@ func Update(resource Resource) []*BalancedError {
 func Delete(resource Resource) []*BalancedError {
 	_, bErrors := apiRequest("DELETE", nil, resource.path()+"/"+resource.getID())
 	return bErrors
-}
-
-func Charge(instrument Instrument, debit *Debit) (*Debit, []*BalancedError) {
-	jsonData, _ := json.Marshal(debit)
-	data, bErrors := apiRequest("POST", jsonData, instrument.path()+"/"+instrument.getID()+"/debits")
-	if len(bErrors) > 0 {
-		return nil, bErrors
-	}
-	var response struct {
-		Debits []*Debit `json:"debits"`
-	}
-	json.Unmarshal(data, &response)
-	return response.Debits[0], bErrors
 }

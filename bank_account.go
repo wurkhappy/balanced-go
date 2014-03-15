@@ -32,14 +32,14 @@ func (b *BankAccount) getID() string {
 	return b.ID
 }
 
+func (b *BankAccount) getOwnerPath() string {
+	return ""
+}
+
 func (b *BankAccount) singleResponse(data []byte) {
 	parsedResponse := new(bankAccountResponse)
 	json.Unmarshal(data, &parsedResponse)
 	*b = *parsedResponse.BankAccounts[0]
-}
-
-func (b *BankAccount) canDebit() bool {
-	return true
 }
 
 //Charge a bank account.

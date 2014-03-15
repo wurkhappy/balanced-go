@@ -25,6 +25,10 @@ func (a *ApiKey) getID() string {
 	return a.ID
 }
 
+func (a *ApiKey) getOwnerPath() string {
+	return ""
+}
+
 func (a *ApiKey) singleResponse(data []byte) {
 	parsedResponse := new(apiKeyResponse)
 	json.Unmarshal(data, &parsedResponse)

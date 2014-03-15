@@ -5,17 +5,30 @@ import (
 )
 
 type Credit struct {
-	Amount               int               `json:"amount,omitempty"`
-	Description          string            `json:"description,omitempty"`
-	AppearsOnStatementAs string            `json:"appears_on_statement_as,omitempty"`
-	ReversalsURI         string            `json:"reversals_uri,omitempty"`
-	Status               string            `json:"status,omitempty"`
-	URI                  string            `json:"uri,omitempty"`
-	Meta                 map[string]string `json:"meta,omitempty"`
+	Debit
 }
 
-func (c *Credit) Retrieve() []*BalancedError {
-	data, bError := apiRequest("GET", nil, c.URI)
-	json.Unmarshal(data, &c)
-	return bError
+type creditResponse struct {
+	Credits []*Credit `json:"credits"`
+}
+
+func (c *Credit) path() string {
+	return "/credits"
+}
+
+func (c *Credit) getID() string {
+	return c.ID
+}
+
+func (c *Credit) getOwnerPath() string {
+	if c.Owner == nil {
+		return ""
+	}
+	return c.Owner.path() + "/" + c.Owner.getID()
+}
+
+func (c *Credit) singleResponse(data []byte) {
+	parsedResponse := new(creditResponse)
+	json.Unmarshal(data, &parsedResponse)
+	*c = *parsedResponse.Credits[0]
 }

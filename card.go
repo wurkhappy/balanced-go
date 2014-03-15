@@ -32,12 +32,12 @@ func (c *Card) getID() string {
 	return c.ID
 }
 
+func (c *Card) getOwnerPath() string {
+	return ""
+}
+
 func (c *Card) singleResponse(data []byte) {
 	parsedResponse := new(cardResponse)
 	json.Unmarshal(data, &parsedResponse)
 	*c = *parsedResponse.Cards[0]
-}
-
-func (c *Card) canDebit() bool {
-	return true
 }

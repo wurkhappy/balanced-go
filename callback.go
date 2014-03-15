@@ -24,6 +24,10 @@ func (c *Callback) getID() string {
 	return c.ID
 }
 
+func (c *Callback) getOwnerPath() string {
+	return ""
+}
+
 func (c *Callback) singleResponse(data []byte) {
 	parsedResponse := new(callbackResponse)
 	json.Unmarshal(data, &parsedResponse)

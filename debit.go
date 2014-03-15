@@ -19,7 +19,7 @@ type Debit struct {
 	Status               string            `json:"status,omitempty"`
 	TransactionNumber    string            `json:"transaction_number,omitempty"`
 	UpdatedAt            time.Time         `json:"updated_at,omitempty"`
-	Owner                Resource
+	Owner                Resource          `json:"-"`
 }
 
 type debitResponse struct {

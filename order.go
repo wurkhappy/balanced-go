@@ -15,7 +15,7 @@ type Order struct {
 	ID              string            `json:"id,omitempty"`
 	Meta            map[string]string `json:"meta,omitempty"`
 	UpdatedAt       time.Time         `json:"updated_at,omitempty"`
-	Owner           Resource
+	Owner           Resource          `json:"-"`
 }
 
 type orderResponse struct {

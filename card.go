@@ -18,6 +18,7 @@ type Card struct {
 	Number          string                 `json:"number,omitempty"`
 	Name            string                 `json:"name,omitempty"`
 	Meta            map[string]interface{} `json:"meta,omitempty"`
+	Customer        string                 `json:"customer,omitempty"`
 }
 
 type cardResponse struct {

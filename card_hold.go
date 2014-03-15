@@ -6,6 +6,7 @@ import (
 
 type CardHold struct {
 	Debit
+	IsVoid bool `json:"is_void,omitempty"`
 }
 
 type cardHoldResponse struct {

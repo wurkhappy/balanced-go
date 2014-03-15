@@ -18,6 +18,7 @@ type BankAccount struct {
 	Name          string                 `json:"name,omitempty"`
 	RoutingNumber string                 `json:"routing_number,omitempty"`
 	Meta          map[string]interface{} `json:"meta,omitempty"`
+	Customer      string                 `json:"customer,omitempty"`
 }
 
 type bankAccountResponse struct {

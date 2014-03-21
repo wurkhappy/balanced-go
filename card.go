@@ -42,3 +42,8 @@ func (c *Card) singleResponse(data []byte) {
 	json.Unmarshal(data, &parsedResponse)
 	*c = *parsedResponse.Cards[0]
 }
+
+func (c *Card) AssociateWithCustomer(customer *Customer) []*BalancedError {
+	c.Customer = customer.path() + "/" + customer.getID()
+	return Update(c)
+}

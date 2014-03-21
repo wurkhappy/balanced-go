@@ -2,6 +2,7 @@ package balanced
 
 import (
 	"encoding/json"
+	"strconv"
 	"time"
 )
 
@@ -39,4 +40,18 @@ func (v *Verification) singleResponse(data []byte) {
 	parsedResponse := new(verificationResponse)
 	json.Unmarshal(data, &parsedResponse)
 	*v = *parsedResponse.Verifications[0]
+}
+
+func (v *Verification) Confirm(amount1 int, amount2 int) []*BalancedError {
+	body := []byte(`{"amount_1":` + strconv.Itoa(amount1) + `, "amount_2":` + strconv.Itoa(amount2) + `}`)
+	data, bErrors := apiRequest("PUT", body, v.path()+"/"+v.getID())
+	if len(bErrors) > 0 {
+		return bErrors
+	}
+	v.singleResponse(data)
+	return nil
+}
+
+func (v *Verification) IsConfirmed() bool {
+	return v.VerificationStatus == "succeeded"
 }

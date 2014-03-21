@@ -43,42 +43,14 @@ func (b *BankAccount) singleResponse(data []byte) {
 	*b = *parsedResponse.BankAccounts[0]
 }
 
-//Charge a bank account.
-//NOTE: A bank account must be verified with micro deposits before it can be debited. See Bank Account Verifications.
-// func (b *BankAccount) Debit(debit *Debit) (*Debit, []*BalancedError) {
-// 	jsonData, _ := json.Marshal(debit)
-// 	data, bErrors := apiRequest("POST", jsonData, "/bank_accounts/"+b.ID+"/debits")
-// 	if len(bErrors) > 0 {
-// 		return nil, bErrors
-// 	}
-// 	var response struct {
-// 		Debits []*Debit `json:"debits"`
-// 	}
-// 	json.Unmarshal(data, &response)
-// 	return response.Debits[0], bErrors
-// }
-
-//Create a new bank account verification.
-//This initiates the process of sending micro deposits to the bank account
-//which will be used to verify bank account ownership when supplied during Confirm a Bank Account Verification.
-//NOTE: If you're sending money to a bank account, known as issuing a credit, you do NOT need to verify the bank account
-func (b *BankAccount) Verify() (*Verification, []*BalancedError) {
-	data, bErrors := apiRequest("POST", nil, "/bank_accounts/"+b.ID+"/verifications")
-	if len(bErrors) > 0 {
-		return nil, bErrors
-	}
-	var response struct {
-		Verifications []*Verification `json:"bank_account_verifications"`
-	}
-	json.Unmarshal(data, &response)
-	return response.Verifications[0], bErrors
+func (b *BankAccount) AssociateWithCustomer(customer *Customer) []*BalancedError {
+	b.Customer = customer.path() + "/" + customer.getID()
+	return Update(b)
 }
 
-func round(value float64) int64 {
-	if value < 0.0 {
-		value -= 0.5
-	} else {
-		value += 0.5
-	}
-	return int64(value)
+func (b *BankAccount) Verify() (*Verification, []*BalancedError) {
+	verification := new(Verification)
+	verification.Owner = b
+	bErrors := Create(verification)
+	return verification, bErrors
 }

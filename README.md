@@ -33,7 +33,9 @@ Invalid requests return an array of errors so all functions and methods in this 
 []*BalancedError
 ```
 
-#### Create a card
+#### Cards
+
+##### Create a card
 
 NOTE: This method is not recommended for production environments. Please use balanced.js to create cards.
 

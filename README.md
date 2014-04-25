@@ -6,6 +6,28 @@ A Balanced API library in Go
 
 go get github.com/wurkhappy/balanced-go
 
+## Usage
+
+```go
+import "github.com/wurkhappy/balanced-go"
+```
+
+#### Create a card
+
+NOTE: This method is not recommended for production environments. Please use balanced.js to create cards.
+
+```go
+card := &balanced.Card{
+		ExpirationMonth: 12,
+		CVV:             "123",
+		Number:          "5105105105105100",
+		ExpirationYear:  2020,
+	}
+	
+balanced.Create(card)
+```
+
+
 ## Contributing
 
 1. Fork it

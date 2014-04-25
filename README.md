@@ -12,6 +12,27 @@ go get github.com/wurkhappy/balanced-go
 import "github.com/wurkhappy/balanced-go"
 ```
 
+###Errors
+
+This package uses a special error type to represent any errors returned by request to the Balanced API
+```go
+type BalancedError struct {
+	Additional   string                 `json:"additional"`
+	CategoryCode string                 `json:"category_code"`
+	CategoryType string                 `json:"category_type"`
+	Description  string                 `json:"description"`
+	Extras       map[string]interface{} `json:"extras"`
+	RequestId    string                 `json:"request_id"`
+	Status       string                 `json:"status"`
+	StatusCode   float64                `json:"status_code"`
+}
+```
+
+Invalid requests return an array of errors so all functions and methods in this package return
+```go
+[]*BalancedError
+```
+
 #### Create a card
 
 NOTE: This method is not recommended for production environments. Please use balanced.js to create cards.

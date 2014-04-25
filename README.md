@@ -14,7 +14,7 @@ import "github.com/wurkhappy/balanced-go"
 
 ###Errors
 
-This package uses a special error type to represent any errors returned by request to the Balanced API
+This package uses a special error type to represent any errors returned by requests to the Balanced API
 ```go
 type BalancedError struct {
 	Additional   string                 `json:"additional"`

@@ -33,9 +33,9 @@ Invalid requests return an array of errors so all functions and methods in this 
 []*BalancedError
 ```
 
-#### Cards
+### Cards
 
-##### Create a card
+#### Create a card
 
 NOTE: This method is not recommended for production environments. Please use balanced.js to create cards.
 
@@ -50,7 +50,7 @@ card := &balanced.Card{
 balanced.Create(card)
 ```
 
-##### Fetch a card
+#### Fetch a card
 
 Fetches the details of a card that has previously been created. Supply the ID that was returned from your previous request, and the corresponding card information will be returned. The same information is returned when creating the card
 
@@ -62,7 +62,7 @@ card := &balanced.Card{
 balanced.Fetch(card)
 ```
 
-##### Update a card
+#### Update a card
 
 Update information on a previously created card.
 NOTE: Once a card has been associated to a customer, it cannot be associated to another customer.
@@ -78,7 +78,7 @@ card := &balanced.Card{
 balanced.Update(card)
 ```
 
-##### Delete a card
+#### Delete a card
 
 Permanently delete a card. It cannot be undone. All debits associated with a deleted credit card will not be affected.
 

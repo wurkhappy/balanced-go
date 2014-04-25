@@ -12,8 +12,6 @@ func apiRequest(verb string, jsonData []byte, path string) (data []byte, bErrors
 	url := apiURL + path
 	body := bytes.NewReader(jsonData)
 	r, _ := http.NewRequest(verb, url, body)
-	fmt.Println("verb is:", verb)
-	fmt.Println("url is:", url)
 	r.SetBasicAuth(Username, "")
 	if jsonData != nil {
 		r.Header.Set("Content-Type", "application/json;revision=1.1")
@@ -31,7 +29,6 @@ func apiRequest(verb string, jsonData []byte, path string) (data []byte, bErrors
 		Errors []*BalancedError `json:"errors"`
 	}
 	if resp.StatusCode >= 400 {
-		fmt.Println(buf.String())
 		json.Unmarshal(buf.Bytes(), &errs)
 	}
 	return buf.Bytes(), errs.Errors

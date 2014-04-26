@@ -12,6 +12,11 @@ go get github.com/wurkhappy/balanced-go
 import "github.com/wurkhappy/balanced-go"
 ```
 
+##### Table of Contents  
+[Errors](#errors)  
+[Cards](#cards)  
+
+<a name="errors"/>
 ###Errors
 
 This package uses a special error type to represent any errors returned by requests to the Balanced API
@@ -33,6 +38,7 @@ Invalid requests return an array of errors so all functions and methods in this 
 []*BalancedError
 ```
 
+<a name="cards"/>
 ### Cards
 
 #### Create a card

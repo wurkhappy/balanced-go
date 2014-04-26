@@ -12,7 +12,6 @@ go get github.com/wurkhappy/balanced-go
 import "github.com/wurkhappy/balanced-go"
 ```
 
-##### Table of Contents  
 [Errors](#errors)  
 [Cards](#cards)  
 

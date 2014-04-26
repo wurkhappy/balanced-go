@@ -33,3 +33,7 @@ func (c *Callback) singleResponse(data []byte) {
 	json.Unmarshal(data, &parsedResponse)
 	*c = *parsedResponse.Callbacks[0]
 }
+
+func (c *Callback) canDelete() bool {
+	return true
+}

@@ -25,7 +25,7 @@ var (
 
 type testCase struct {
 	testType string
-	resource Resource
+	resource Resourcer
 }
 
 func createCases() []*testCase {
@@ -124,30 +124,13 @@ func Test_Fetch(t *testing.T) {
 func Test_Delete(t *testing.T) {
 	cases := createCases()
 	for _, c := range cases {
-		if shouldIgnoreForDelete(c.testType) {
+		if _, ok := c.resource.(Deleter); !ok {
 			continue
 		}
 		Create(c.resource)
-		bErrors := Delete(c.resource)
+		bErrors := Delete(c.resource.(Deleter))
 		if len(bErrors) > 0 {
 			t.Errorf("Type - %q Error returned:%q", c.testType, bErrors)
 		}
 	}
-}
-
-func shouldIgnoreForDelete(testType string) bool {
-	var shouldIgnore bool = false
-	switch testType {
-	case cardHoldTestType:
-		shouldIgnore = true
-	case debitForCardTestType:
-		shouldIgnore = true
-	case orderTestType:
-		shouldIgnore = true
-	case refundTestType:
-		shouldIgnore = true
-	case reversalTestType:
-		shouldIgnore = true
-	}
-	return shouldIgnore
 }

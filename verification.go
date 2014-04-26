@@ -14,7 +14,7 @@ type Verification struct {
 	ID                 string    `json:"id,omitempty"`
 	UpdatedAt          time.Time `json:"updated_at,omitempty"`
 	VerificationStatus string    `json:"verification_status,omitempty"`
-	Owner              Resource  `json:"-"`
+	Owner              Resourcer `json:"-"`
 }
 
 type verificationResponse struct {

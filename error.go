@@ -10,3 +10,7 @@ type BalancedError struct {
 	Status       string                 `json:"status"`
 	StatusCode   float64                `json:"status_code"`
 }
+
+func (b *BalancedError) Error() string {
+	return b.Description
+}

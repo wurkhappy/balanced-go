@@ -19,7 +19,7 @@ type Credit struct {
 	Status               string            `json:"status,omitempty"`
 	TransactionNumber    string            `json:"transaction_number,omitempty"`
 	UpdatedAt            time.Time         `json:"updated_at,omitempty"`
-	Owner                Resource          `json:"-"`
+	Owner                Resourcer         `json:"-"`
 }
 
 type creditResponse struct {

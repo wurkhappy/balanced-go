@@ -43,6 +43,10 @@ func (c *Card) singleResponse(data []byte) {
 	*c = *parsedResponse.Cards[0]
 }
 
+func (c *Card) canDelete() bool {
+	return true
+}
+
 func (c *Card) AssociateWithCustomer(customer *Customer) []*BalancedError {
 	c.Customer = customer.path() + "/" + customer.getID()
 	return Update(c)

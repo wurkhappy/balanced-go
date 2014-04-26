@@ -43,6 +43,10 @@ func (c *Customer) singleResponse(data []byte) {
 	*c = *parsedResponse.Customers[0]
 }
 
+func (c *Customer) canDelete() bool {
+	return true
+}
+
 func (c *Customer) IsVerified() bool {
 	return c.MerchantStatus == "underwritten"
 }

@@ -35,32 +35,6 @@ func (a *ApiKey) singleResponse(data []byte) {
 	*a = *parsedResponse.ApiKeys[0]
 }
 
-//Create a new API key.
-func (a *ApiKey) Create() []*BalancedError {
-	data, bErrors := apiRequest("POST", nil, "/api_keys")
-	if len(bErrors) > 0 {
-		return bErrors
-	}
-	parsedResponse := new(apiKeyResponse)
-	json.Unmarshal(data, &parsedResponse)
-	*a = *parsedResponse.ApiKeys[0]
-	return nil
-}
-
-//Get an existing API key.
-func (a *ApiKey) Fetch() []*BalancedError {
-	data, bErrors := apiRequest("GET", nil, "/api_keys/"+a.ID)
-	if len(bErrors) > 0 {
-		return bErrors
-	}
-	parsedResponse := new(apiKeyResponse)
-	json.Unmarshal(data, &parsedResponse)
-	*a = *parsedResponse.ApiKeys[0]
-	return nil
-}
-
-//Delete an API key.
-func (a *ApiKey) Delete() []*BalancedError {
-	_, bErrors := apiRequest("DELETE", nil, "/api_keys/"+a.ID)
-	return bErrors
+func (a *ApiKey) canDelete() bool {
+	return true
 }

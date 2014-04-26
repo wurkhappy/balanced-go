@@ -43,6 +43,10 @@ func (b *BankAccount) singleResponse(data []byte) {
 	*b = *parsedResponse.BankAccounts[0]
 }
 
+func (b *BankAccount) canDelete() bool {
+	return true
+}
+
 func (b *BankAccount) AssociateWithCustomer(customer *Customer) []*BalancedError {
 	b.Customer = customer.path() + "/" + customer.getID()
 	return Update(b)

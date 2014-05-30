@@ -15,6 +15,7 @@ import "github.com/wurkhappy/balanced-go"
 [Errors](#errors)  
 [Cards](#cards)  
 [Bank Accounts](#bank_accounts)  
+[Bank Account Verifications](#bank_account_verifications)  
 
 <a name="errors"/>
 ###Errors

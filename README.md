@@ -188,6 +188,52 @@ debit := &balanced.Debit{
 balanced.Create(debit)
 ```
 
+<a name="bank_account_verifications"/>
+### Bank Account Verifications
+
+#### Create a bank account verification
+
+Create a new bank account verification. This initiates the process of sending micro deposits to the bank account which will be used to verify bank account ownership when supplied during Confirm a Bank Account Verification.
+
+NOTE: If you're sending money to a bank account, known as issuing a credit, you do NOT need to verify the bank account
+```go
+bank_account := &balanced.BankAccount{
+		ID: "BA7sojXcP7oSdQyrjUA7wXg9",
+}
+
+verification := &balanced.Verification{
+		Owner: bank_account,
+	}
+	
+balanced.Create(verification)
+```
+
+#### Fetch a bank account verification
+
+Fetches the verification for a bank account.
+
+```go
+verification := &balanced.Verification{
+		ID: "BZ2foJI7Q0q9GDbtZJktA7W1",
+	}
+	
+balanced.Fetch(verification)
+```
+
+#### Confirm a Bank Account Verification
+
+Confirm the trial deposit amounts that were sent to the bank account. Upon seeing the verification amounts on their bank account statement, the customer should return to a web form and enter the amounts. The amounts entered are compared to the amounts sent to assert valid ownership of the bank account.
+
+NOTE:If you're sending money to a bank account, known as issuing a credit, you do NOT need to verify the bank account
+
+```go
+verification := &balanced.Verification{
+		ID: "BZ2foJI7Q0q9GDbtZJktA7W1",
+	}
+	
+verification.Confirm(1, 1)
+```
+
 ## Contributing
 
 1. Fork it
